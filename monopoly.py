@@ -10,9 +10,8 @@ from enum import Enum
 #if you ever come across this code and want to use it,
 #do with it what you want, execpt killing and/or opress people
 
-#feldnamen:
 
-	
+
 
 
 class Fieldtype(Enum):
@@ -57,9 +56,9 @@ class Player:
 
 class Field:
 		
-        name = ""
-        typeoffield = 0
-        numberoftimesbeenvisited = 0
+	name = ""
+	typeoffield = 0
+	numberoftimesbeenvisited = 0
 
 	def __init__(self, data):
 		self.name = data[0]
@@ -76,7 +75,7 @@ class Field:
 class ComunityCardDeck:
 	#poc
 	cards = [
-		"",
+		"blah",
 		"blub",
 		"peng"
 		]
@@ -86,6 +85,14 @@ class ComunityCardDeck:
 		self.cards.append(val)
 		return val
 		
+class EventCardDeck:
+
+	cards = []
+
+	def drawcard(self):
+		val = self.cards.pop(0)
+		self.cards.append(val)
+		return val
 
 class Board:
 
@@ -123,7 +130,7 @@ class Board:
 	('Gehen Sie in das Gefängnis', Fieldtype.GOTOJAIL),
 	('Rathausplatz', Fieldtype.STREET),
 	('Hauptstraße', Fieldtype.STREET),
-        ('Gemeinschaftsfeld', Fieldtype.COMMUNITY),
+	('Gemeinschaftsfeld', Fieldtype.COMMUNITY),
 	('Bahnhofsstraße', Fieldtype.STREET),
 	('Hauptbahnhof', Fieldtype.STREET),
 	('Ereignisfeld', Fieldtype.EVENT),
@@ -157,40 +164,48 @@ class Board:
 	def play(self, numberofrounds = 10000):
 		for i in range(numberofrounds):
 			for player in self.players:
-                                turnended = False
-                                while not turnended:
-                                    turnended = True
-                                    doubles = 0
-                                    self.dice.roll()
-                                    
-                                    self.dice.isdouble():
-                                        doubles +=1
-                                        tuenended = False
-                                    if doubles > 2:
-                                                    player.isinjail = not player.isinjail
-                                                    doubles = 0
-                                                    turnended = True
-                                    if player.isinjail:
-                                            player.currentfield = 9
-                                            break
+				turnended = False
+				doubles = 0
+				while not turnended:
+					turnended = True
+					self.dice.roll()
 
-                                    player.currentfield = (player.currentfield+self.dice.getval()) % len(self.fields)
+				if self.dice.isdouble():
+					doubles += 1 
+					tuenended = False
+					if player.isinjail: player.isinjail = False
+				if doubles > 2:
+						player.isinjail = True
+						doubles = 0
+						turnended = True
+				if player.isinjail:
+					player.currentfield = 9
+					break
 
-                                    self.fields[player.currentfield].numberoftimesbeenvisited += 1
-                                    fieldtype = self.fields[player.currentfield].typeoffield
-                                    if fieldtype == Fieldtype.GOTOJAIL:
-                                        player.currentfield = 9
-                                        player.isinjail = True
-                                
+				player.currentfield = (player.currentfield+self.dice.getval()) % len(self.fields)
+
+				self.fields[player.currentfield].numberoftimesbeenvisited += 1
+				fieldtype = self.fields[player.currentfield].typeoffield
+				if fieldtype == Fieldtype.GOTOJAIL:
+					player.currentfield = 9
+					self.fields[player.currentfield].numberoftimesbeenvisited += 1
+					player.isinjail = True
+				if fieldtype == Fieldtype.COMMUNITY:
+					pass
+				if fieldtype == Fieldtype.EVENT:
+					pass
 
 
 	def end(self):
 		for field in self.fields:
-                    print("field: {}, visited: {}".format(field.name, field.numberoftimesbeenvisited))
+			print("field: {}, visited: {}".format(field.name, field.numberoftimesbeenvisited))
 		
 		
 if __name__ == "__main__":
-	game = Board()
-	game.play()
-	game.end()
-	
+	#game = Board()
+	#game.play()
+	#game.end()
+	deck = ComunityCardDeck()
+	for i in range(5):
+		card = deck.drawcard()
+		print(card)
