@@ -1,4 +1,4 @@
-# -*- coding:utf-8 -*-
+# -*- coding:utf-8  -*-
 import random
 from enum import Enum
 
@@ -10,9 +10,7 @@ from enum import Enum
 #if you ever come across this code and want to use it,
 #do with it what you want, execpt killing and/or opress people
 
-
-
-
+#//edit: got a executing version, so i peeked to the original post and my code is massively overblown
 
 class Fieldtype(Enum):
 	STREET		= 1
@@ -22,10 +20,9 @@ class Fieldtype(Enum):
 	JAIL		= 5
 	COMMUNITY 	= 6
 	EVENT 		= 7
-	
+
 
 class Dice:
-
 	firstdie = 0
 	seconddie = 0
 
@@ -44,50 +41,65 @@ class Dice:
 
 class Player:
 
-	
+
 	color = ""
 	currentfield = 0
 	isinjail = False
 	injailsince = 0
 	doublesrolled = 0
+	getoutofjailcard = False
 
 	def __init__(self, color):
 		self.color = color
 
 class Field:
-		
+
 	name = ""
 	typeoffield = 0
 	numberoftimesbeenvisited = 0
 
 	def __init__(self, data):
 		self.name = data[0]
-
 		self.typeoffield = data[1]
-	
-#        def haseffect(self):
-#            if self.typeoffield  in [Fieldtype.COMMUNITY, Fieldtype.EVENT, Fieldtype.GOTOJAIL]:
-#                return True
-#            return False
 
+class CommunityCardDeck:
 
-
-class ComunityCardDeck:
-	#poc
 	cards = [
-		"blah",
-		"blub",
-		"peng"
+		"getoutofjail",
+		"gotojail",
+		"nothing",
+		"nothing",
+		"nothing",
+		"nothing",
+		"nothing",
+		"nothing",
+		"nothing",
+		"nothing",
+		"nothing",
+		"nothing",
+		"nothing",
+		"nothing",
+		"nothing",
+		"nothing",
+		"nothing"
 		]
+
+	def shuffle(self):
+		random.shuffle(self.cards)
 
 	def drawcard(self):
 		val = self.cards.pop(0)
-		self.cards.append(val)
+		if val != "getoutofjail":
+			self.cards.append(val) 
 		return val
-		
+
 class EventCardDeck:
 
-	cards = []
+	cards = [
+		"hallo",
+		"welt"
+		]
+
 
 	def drawcard(self):
 		val = self.cards.pop(0)
@@ -97,48 +109,47 @@ class EventCardDeck:
 class Board:
 
 	streets = [
-	('Los', Fieldtype.START ),
-	('Badstraße', Fieldtype.STREET),
-	('Gemeinschaftsfeld', Fieldtype.COMMUNITY),
-	('Turmstraße', Fieldtype.STREET),
-	('Einkommenssteuer', Fieldtype.OTHER),
-	('Südbahnhof', Fieldtype.STREET),
-	('Chausseestraße', Fieldtype.STREET),
-	('Ereignisfeld', Fieldtype.EVENT),
-	('Elisenstraße', Fieldtype.STREET),
-	('Poststraße', Fieldtype.STREET),
-	('Gefängnis', Fieldtype.JAIL),
-	('Seestraße', Fieldtype.STREET),
-	('Elektrizitätswerk', Fieldtype.STREET),
-	('Hafenstraße', Fieldtype.STREET ),
-	('Neue Straße', Fieldtype.STREET),
-	('Westbahnhof', Fieldtype.STREET),
-	('Münchner Straße', Fieldtype.STREET),
-	('Gemeinschaftsfeld', Fieldtype.COMMUNITY),
-	('Wiener Straße', Fieldtype.STREET),
-	('Berliner Straße', Fieldtype.STREET),
-	('Frei Parken', Fieldtype.OTHER),
-	('Theaterstraße', Fieldtype.STREET),
-	('Ereignisfeld', Fieldtype.EVENT),
-	('Museumstraße', Fieldtype.STREET),
-	('Opernplatz', Fieldtype.STREET),
-	('Nordbahnhof', Fieldtype.STREET),
-	('Lessingstraße', Fieldtype.STREET),
-	('Schillerstraße', Fieldtype.STREET),
-	('Wasserwerk', Fieldtype.STREET),
-	('Goethestraße', Fieldtype.STREET),
-	('Gehen Sie in das Gefängnis', Fieldtype.GOTOJAIL),
-	('Rathausplatz', Fieldtype.STREET),
-	('Hauptstraße', Fieldtype.STREET),
-	('Gemeinschaftsfeld', Fieldtype.COMMUNITY),
-	('Bahnhofsstraße', Fieldtype.STREET),
-	('Hauptbahnhof', Fieldtype.STREET),
-	('Ereignisfeld', Fieldtype.EVENT),
-	('Parkstraße', Fieldtype.STREET),
-	('Zusatzsteuer', Fieldtype.OTHER),
-	('Schloßallee', Fieldtype.STREET)
+		('Los', Fieldtype.START ),
+		('Badstraße', Fieldtype.STREET),
+		('Gemeinschaftsfeld', Fieldtype.COMMUNITY),
+		('Turmstraße', Fieldtype.STREET),
+		('Einkommenssteuer', Fieldtype.OTHER),
+		('Südbahnhof', Fieldtype.STREET),
+		('Chausseestraße', Fieldtype.STREET),
+		('Ereignisfeld', Fieldtype.EVENT),
+		('Elisenstraße', Fieldtype.STREET),
+		('Poststraße', Fieldtype.STREET),
+		('Gefängnis', Fieldtype.JAIL),
+		('Seestraße', Fieldtype.STREET),
+		('Elektrizitätswerk', Fieldtype.STREET),
+		('Hafenstraße', Fieldtype.STREET ),
+		('Neue Straße', Fieldtype.STREET),
+		('Westbahnhof', Fieldtype.STREET),
+		('Münchner Straße', Fieldtype.STREET),
+		('Gemeinschaftsfeld', Fieldtype.COMMUNITY),
+		('Wiener Straße', Fieldtype.STREET),
+		('Berliner Straße', Fieldtype.STREET),
+		('Frei Parken', Fieldtype.OTHER),
+		('Theaterstraße', Fieldtype.STREET),
+		('Ereignisfeld', Fieldtype.EVENT),
+		('Museumstraße', Fieldtype.STREET),
+		('Opernplatz', Fieldtype.STREET),
+		('Nordbahnhof', Fieldtype.STREET),
+		('Lessingstraße', Fieldtype.STREET),
+		('Schillerstraße', Fieldtype.STREET),
+		('Wasserwerk', Fieldtype.STREET),
+		('Goethestraße', Fieldtype.STREET),
+		('Gehen Sie in das Gefängnis', Fieldtype.GOTOJAIL),
+		('Rathausplatz', Fieldtype.STREET),
+		('Hauptstraße', Fieldtype.STREET),
+		('Gemeinschaftsfeld', Fieldtype.COMMUNITY),
+		('Bahnhofsstraße', Fieldtype.STREET),
+		('Hauptbahnhof', Fieldtype.STREET),
+		('Ereignisfeld', Fieldtype.EVENT),
+		('Parkstraße', Fieldtype.STREET),
+		('Zusatzsteuer', Fieldtype.OTHER),
+		('Schloßallee', Fieldtype.STREET)
 	]
-	
 	playercolors = [
 		"red",
 		"yellow",
@@ -148,10 +159,13 @@ class Board:
 		"white",
 		"pink",
 		"brown"
-		]
+	]
 	fields = []
 	players = []
 	dice = Dice()
+	communitydeck = CommunityCardDeck()
+	eventdeck = EventCardDeck()
+	jailpos = 10
 
 	def __init__(self, numberofplayers = 4):
 		if not 3 <= numberofplayers <= 8:
@@ -169,43 +183,52 @@ class Board:
 				while not turnended:
 					turnended = True
 					self.dice.roll()
-
-				if self.dice.isdouble():
-					doubles += 1 
-					tuenended = False
-					if player.isinjail: player.isinjail = False
-				if doubles > 2:
+					if self.dice.isdouble():
+						doubles += 1 
+						tuenended = False
+						if player.isinjail:
+							player.isinjail = False
+							player.injailsince = 0
+						if doubles > 2:
+							player.isinjail = True
+							doubles = 0
+							turnended = True
+					if player.isinjail:
+						player.currentfield = self.jailpos
+						self.fields[player.currentfield].numberoftimesbeenvisited += 1
+					else:
+						player.currentfield = (player.currentfield+self.dice.getval()) % len(self.fields)
+						self.fields[player.currentfield].numberoftimesbeenvisited += 1
+					fieldtype = self.fields[player.currentfield].typeoffield
+					if fieldtype == Fieldtype.COMMUNITY:
+						card = self.communitydeck.drawcard()
+						if card == "gotojail":
+							fieldtype = Fieldtype.GOTOJAIL
+							player.currentfield = 9
+						if card == "getoutofjail":
+							player.getoutofjailcard = True
+					if fieldtype == Fieldtype.EVENT:
+						card = self.eventdeck.drawcard()
+						if card == False:
+							pass
+					if fieldtype == Fieldtype.GOTOJAIL:
+						player.currentfield = self.jailpos
+						self.fields[player.currentfield].numberoftimesbeenvisited += 1
+						fieldtype = Fieldtype.JAIL
 						player.isinjail = True
-						doubles = 0
-						turnended = True
-				if player.isinjail:
-					player.currentfield = 9
-					break
-
-				player.currentfield = (player.currentfield+self.dice.getval()) % len(self.fields)
-
-				self.fields[player.currentfield].numberoftimesbeenvisited += 1
-				fieldtype = self.fields[player.currentfield].typeoffield
-				if fieldtype == Fieldtype.GOTOJAIL:
-					player.currentfield = 9
-					self.fields[player.currentfield].numberoftimesbeenvisited += 1
-					player.isinjail = True
-				if fieldtype == Fieldtype.COMMUNITY:
-					pass
-				if fieldtype == Fieldtype.EVENT:
-					pass
-
+					if fieldtype == Fieldtype.JAIL:
+						if player.getoutofjailcard:
+							self.communitydeck.cards.append("getoutofjail")
+							self.gotoutofjailcard = False
+						else:
+							player.injailsince += 1
 
 	def end(self):
 		for field in self.fields:
 			print("field: {}, visited: {}".format(field.name, field.numberoftimesbeenvisited))
-		
-		
+
+
 if __name__ == "__main__":
-	#game = Board()
-	#game.play()
-	#game.end()
-	deck = ComunityCardDeck()
-	for i in range(5):
-		card = deck.drawcard()
-		print(card)
+	game = Board()
+	game.play()
+	game.end()
